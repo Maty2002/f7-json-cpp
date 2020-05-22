@@ -38,7 +38,7 @@ void cgii::wczytaj(){
 
 void cgii::wypisz(){
 	
-	cout<<"Content-Type: application/json;Access-Control-Allow-Origin: *" << (char)13 << (char)10;
+	cout<<"Content-Type: application/json;charset=UTF-8;Access-Control-Allow-Origin: *" << (char)13 << (char)10;
 	cout<<endl<<"[";
 	
 	for(int i=0;i<tab.size();i+=2){
