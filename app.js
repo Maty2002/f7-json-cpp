@@ -1,5 +1,3 @@
-//import axios from 'axios';
-
 var $$ = Dom7;
 
 var app = new Framework7({
@@ -54,41 +52,52 @@ $$(document).on('page:init', '.page[data-name="list"]', function(e){
   //  fetch('http://localhost/cgi-bin/main.cgi', { mode: 'no-cors'})
   //    .then(resp => console.log(resp))
 
-  // axios
-  //       .get('http://localhost/cgi-bin/main.cgi') //api url
-  //       .then(response => {
-  //           console.log(items, response.data);
-  //       });
+        
+  axios
+  .get('http://localhost/cgi-bin/main.cgi') //api url
+  .then(response => {
 
-            var virtualList = app.virtualList.create({
-                // List Element
-                el: '.virtual-list',
-                // Pass array with items
-                items: [{"title":"adam","subtitle":"lubojaniski"},{"title":"kamil","subtitle":"kucharski"},{"title":"mateusz","subtitle":"malolepszy"}], //JSON z api
-                // Custom search function for searchbar
-                searchAll: function(query, items) {
-                    var found = [];
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].title.toLowerCase().indexOf(query.toLowerCase()) >= 0 || query.trim() === '') found.push(i);
-                    }
-                    return found; //return array with mathced indexes
-                },
-                // List item Template7 template
-                itemTemplate: '<li>' +
-                    '<a href="#" class="item-link item-content">' +
-                    '<div class="item-inner">' +
-                    '<div class="item-title-row">' +
-                    '<div class="item-title">{{title}}</div>' +
-                    '</div>' +
-                    '<div class="item-subtitle">{{subtitle}}</div>' +
-                    '</div>' +
-                    '</a>' +
-                    '</li>',
-                // Item height
+      let copy = [...response.data];
+      let x;
+      
+      copy.forEach(el=>{ //Zmiana pierwszych liter na duże
+        [x,...rest] = el.imie;
+        x = x.toUpperCase();
+        el.imie = x.concat(rest.join(''));
+        
+        [x,...rest] = el.subtitle;
+        x = x.toUpperCase();
+        el.subtitle = x.concat(rest.join(''));
+    });
 
-            });
+      let virtualList = app.virtualList.create({
 
-})
+          el: '.virtual-list',
+
+          items: copy,
+          
+          searchAll: function(query, items) {
+              let found = [];
+              for (let i = 0; i < items.length; i++) {
+                  if (items[i].title.toLowerCase().indexOf(query.toLowerCase()) >= 0 || query.trim() === '') found.push(i);
+              }
+              return found; 
+          },
+         
+          itemTemplate: '<li>' +
+              '<a href="#" class="item-link item-content">' +
+              '<div class="item-inner">' +
+              '<div class="item-title-row">' +
+              '<div class="item-title">{{imie}}</div>' +
+              '</div>' +
+              '<div class="item-subtitle">{{subtitle}}</div>' +
+              '</div>' +
+              '</a>' +
+              '</li>',
+
+      });
+  });
+});    
 
 //////////////////////////////////////////////////////
 
